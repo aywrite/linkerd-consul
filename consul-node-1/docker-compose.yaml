@@ -1,0 +1,16 @@
+version: '3'
+services:
+  webapp:
+    build: ../app
+    environment:
+      - HEALTH=warning
+    ports:
+      - 8080:8080
+
+  consul:
+    container_name: consul.agent
+    command: agent -bind 192.168.99.103 -config-dir=/etc/consul.d -enable-script-checks=true -join=192.168.99.101
+    image: consul:latest
+    network_mode: host
+    volumes:
+      - ../etc/consul.node/config:/etc/consul.d/

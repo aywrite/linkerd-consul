@@ -1,0 +1,17 @@
+{"service": 
+    {
+        "name": "prime-app",
+        "tags": ["prime"],
+        "port": 8080,
+        "check": 
+        {
+            "id": "api",
+            "name": "HTTP API on port 8080",
+            "http": "http://localhost:8080/ping/",
+            "tls_skip_verify": true,
+            "method": "GET",
+            "interval": "10s",
+            "timeout": "1s"
+        }
+    }
+}

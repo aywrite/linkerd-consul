@@ -1,0 +1,36 @@
+admin:
+  port: 9990
+
+routers:
+- protocol: http
+  label: /prime
+  service:
+    responseClassifier:
+      kind: io.l5d.http.retryableIdempotent5XX
+  identifier:
+   kind: io.l5d.path
+   segments: 1
+   consume: true
+  dtab: |
+    /svc => /#/fallback/dc1/prime-app;
+    /svc => /#/default/dc1/prime-app;
+  servers:
+  - port: 4140
+    ip: 0.0.0.0
+
+namers:
+- kind: io.l5d.consul
+  prefix: /default
+  host: 127.0.0.1
+  includeTag: false
+  useHealthCheck: true
+  setHost: false
+  consistencyMode: default
+
+- kind: io.l5d.consul
+  prefix: /fallback
+  host: 127.0.0.1
+  includeTag: false
+  useHealthCheck: false
+  setHost: false
+  consistencyMode: default

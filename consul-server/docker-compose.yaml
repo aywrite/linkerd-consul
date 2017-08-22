@@ -1,0 +1,19 @@
+version: '2'
+services: 
+  consul:
+    command: agent -server -bind 192.168.99.101 -client 0.0.0.0 -bootstrap-expect=1 -node=server-one -ui -config-dir=/etc/consul.d -join 192.168.99.102 
+    image: consul:latest
+    network_mode: host
+    volumes:
+      - ../etc/consul.server/config:/etc/consul.d/
+    ports:
+      - 8500:8500
+  linkerd:
+    command: /etc/linkerd/config.yaml
+    image: buoyantio/linkerd:latest
+    network_mode: host
+    ports:
+    - 8080:8080
+    - 4140:4140
+    volumes:
+      - ../etc/linkerd/config:/etc/linkerd/
